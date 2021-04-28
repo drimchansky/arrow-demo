@@ -2,19 +2,14 @@
   "private": true,
   "scripts": {
     "watch": "parcel src/index.html --no-cache",
-    "build": "parcel build src/index.html --public-url ./ --out-dir ./prod --no-cache",
-    "clear": "rimraf dist/ prod/",
-    "lint": "node -e console.clear() && stylelint src/styles/**/*.css"
+    "build": "parcel build src/index.html --public-url ./ --out-dir ./public --no-cache",
+    "clear": "rimraf dist/ public/ .parcel-cache/"
   },
   "dependencies": {},
   "devDependencies": {
     "autoprefixer": "^9.8.6",
     "eslint": "^6.8.0",
-    "eslint-config-airbnb": "^18.2.1",
-    "eslint-config-airbnb-base": "^14.2.1",
-    "eslint-config-prettier": "^6.15.0",
     "eslint-plugin-import": "^2.22.1",
-    "eslint-plugin-prettier": "^3.4.0",
     "gsap": "^3.6.1",
     "matter-js": "^0.17.1",
     "normalize.css": "^8.0.1",
@@ -24,36 +19,8 @@
     "postcss-css-variables": "^0.13.0",
     "postcss-custom-properties": "^9.2.0",
     "postcss-modules": "^1.5.0",
-    "postcss-nested": "^4.2.3",
     "stylelint": "^11.1.1",
-    "stylelint-config-standard": "^19.0.0"
-  },
-  "postcss": {
-    "modules": false,
-    "plugins": {
-      "autoprefixer": {
-        "grid": true
-      },
-      "postcss-nested": {},
-      "postcss-custom-properties": {
-        "preserve": true,
-        "importFrom": "./src/styles/properties.css"
-      }
-    }
-  },
-  "browserslist": [
-    "last 1 version",
-    "> 1%",
-    "IE 10"
-  ],
-  "eslintIgnore": [
-    "node_modules",
-    "dist",
-    ".cache"
-  ],
-  "stylelint": {
-    "extends": [
-      "stylelint-config-standard"
-    ]
+    "stylelint-config-standard": "^19.0.0",
+    "stylelint-order": "^4.1.0"
   }
 }

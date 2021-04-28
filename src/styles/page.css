@@ -1,8 +1,0 @@
-/* PAGE */
-
-.page {
-  &__body {
-    display: grid;
-    color: var(--theme-bg);
-  }
-}

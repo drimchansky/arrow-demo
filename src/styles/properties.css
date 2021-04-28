@@ -1,7 +1,6 @@
-/* properties */
 :root {
-  --theme-bg: #16141a;
-  --theme-primary: #ecdede;
-  --logo-font: 'Anton', sans-serif;
-  --page-font: 'Nunito', sans-serif;
+    --theme-bg: #16141a;
+    --theme-primary: #ecdede;
+    --logo-font: 'Anton', sans-serif;
+    --page-font: 'Nunito', sans-serif;
 }

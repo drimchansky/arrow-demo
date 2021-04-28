@@ -1,15 +1,8 @@
-import Matter from 'matter-js'
+import { Back, Power0 } from 'gsap/all'
+import { Engine, Render, Runner, Bodies, Constraint, Composite } from 'matter-js'
 import gsap from 'gsap'
 
-// module aliases
-const Engine = Matter.Engine,
-    Render = Matter.Render,
-    Runner = Matter.Runner,
-    Bodies = Matter.Bodies,
-    Constraint = Matter.Constraint,
-    Composite = Matter.Composite;
-
-const ARROW_MASS = 1.5
+const ARROW_MASS = 1.2
 const DOT_MASS = 1
 const WHEEL_RADIUS = 200
 const SECTORS_AMOUNT = 16
@@ -18,10 +11,8 @@ const PI = Math.PI
 const windowHeight = document.body.offsetHeight
 const windowWidth = document.body.offsetWidth
 
-// create an engine
-const engine = Engine.create();
+const engine = Engine.create()
 
-// create a renderer
 const render = Render.create({
     element: document.body,
     engine: engine,
@@ -36,9 +27,7 @@ const wheelReel = Bodies.circle(windowWidth / 2, windowHeight / 2, WHEEL_RADIUS)
 const { min, max } = wheelReel.bounds
 const wheelReelHeight = max.y - min.y
 wheelReel.collisionFilter = {
-    group: -1,
-    'category': 2,
-    'mask': 0,
+    group: -1
 }
 const wheelReelConstraints = Constraint.create({
     bodyA: wheelReel,
@@ -57,10 +46,7 @@ const arrowBody = Bodies.rectangle(windowWidth / 2, windowHeight / 2 - wheelReel
 })
 const arrowConstraints = Constraint.create({
     bodyA: arrowBody,
-    pointA: {
-        x: 0,
-        y: -20
-    },
+    pointA: { x: 0, y: -20 },
     pointB: {
         x: windowWidth / 2,
         y: windowHeight / 2 - wheelReelHeight / 2 - 25
@@ -69,8 +55,23 @@ const arrowConstraints = Constraint.create({
     anchors: true
 })
 
-Composite.add(engine.world, [wheelReel, arrowBody, wheelReelConstraints, arrowConstraints]);
+const topPoint = Bodies.circle(windowWidth / 2, arrowBody.position.y - 70, 2, {
+    isStatic: true
+})
+const topPointConstraints = Constraint.create({
+    bodyA: arrowBody,
+    pointA: { x: 1, y: 1 },
+    bodyB: topPoint,
+    pointB: { x: 1, y: 1 },
+    stiffness: 0.1,
+    length: 70
+})
 
+const stopperBodyLeft = Bodies.rectangle(arrowBody.position.x - 25 - 7, arrowBody.position.y, 50, 50, {
+    isStatic: true
+})
+
+Composite.add(engine.world, [wheelReel, arrowBody, wheelReelConstraints, arrowConstraints, topPoint, topPointConstraints, stopperBodyLeft])
 
 const angle = PI * 2 / SECTORS_AMOUNT
 
@@ -91,15 +92,30 @@ for (let i = 0; i < SECTORS_AMOUNT; i ++) {
         length: 0
     })
 
-    Composite.add(engine.world, [dot, dotConstraints]);
+    Composite.add(engine.world, [dot, dotConstraints])
 }
 
-Render.run(render);
+Render.run(render)
 
-const runner = Runner.create();
-Runner.run(runner, engine);
+const runner = Runner.create()
+Runner.run(runner, engine)
 
 window.addEventListener('click', () => {
-    gsap.fromTo(wheelReel, { angle: 0 }, { angle: PI * 2, duration: 2 })
-})
 
+    gsap.timeline()
+        .to(wheelReel, {
+            angle: Math.PI * 2,
+            ease: Back.easeIn.config(0.75),
+            duration: 2.5
+        }, 0)
+        .fromTo(wheelReel, { angle: 0 }, {
+            angle: Math.PI * 2,
+            repeat: 3,
+            duration: 0.7,
+            ease: Power0.easeNone
+        }, '>')
+        .to(wheelReel, { angle: `+=${6 * Math.PI}`, duration: 6.2, ease: Back.easeOut.config(0) }, '>')
+        .set(topPoint, { position: { x: windowWidth / 2 + 110, y: arrowBody.position.y + 30 } }, 2)
+        .set(topPoint, { position: { x: windowWidth / 2, y: arrowBody.position.y - 70 } }, 6)
+
+})

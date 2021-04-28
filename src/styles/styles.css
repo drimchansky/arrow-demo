@@ -1,5 +1,7 @@
 @import '../../node_modules/normalize.css/normalize.css';
-
-@import './common.css';
 @import './fonts.css';
-@import './page.css';
+@import './properties.css';
+
+body {
+    height: 100%;
+}
